@@ -12,11 +12,11 @@ from fastapi.websockets import WebSocket
 app = FastAPI()
 
 origins = ["*"]
-laptop_ip = "192.168.18.32"
-
+# laptop_ip = "192.168.18.32"
+laptop_ip = "52.0.41.103"
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins  + [f"http://{laptop_ip}"],
+    allow_origins=origins + [f"http://{laptop_ip}"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

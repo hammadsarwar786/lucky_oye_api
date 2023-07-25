@@ -3,8 +3,8 @@ import psycopg2
 from fastapi import HTTPException
 
 # Replace these values with your actual database credentials
-hostname = 'ec2-52-0-41-103.compute-1.amazonaws.com'
-# hostname = "0.0.0.0"
+# hostname = 'ec2-52-0-41-103.compute-1.amazonaws.com'
+hostname = "0.0.0.0"
 database_name = 'crmdb'
 username = 'postgres'
 password = 'Admin@12345'
