@@ -26,7 +26,7 @@ class WebSocketManager:
 websocket_manager = WebSocketManager()
 router = APIRouter()
 
-@router.post("/notifications/")
+@router.post("/notification")
 async def create_notification(message: Request, db: psycopg2.extensions.connection = Depends(get_database_connection)):
     try:
         data = await message.json()
@@ -38,12 +38,12 @@ async def create_notification(message: Request, db: psycopg2.extensions.connecti
 
         # Send the new notification to all connected WebSocket clients
         await websocket_manager.broadcast_notification(message=data["message"])
-        return {"message": "Notification created successfully"}
+        return {"success": True, "message": "Notification created successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error creating notification: {str(e)}")
 
 
-@router.websocket("/ws")
+@router.websocket("socket/notification")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket_manager.connect(websocket)
     try:
