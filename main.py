@@ -4,6 +4,7 @@ from auth import router as auth_router
 from notification import router as notifi
 from listing import router as list
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 # CORS configuration
 
 
@@ -29,6 +30,11 @@ app.include_router(notifi, prefix="/api", tags=["notification"])
 app.include_router(auth_router, prefix="/api", tags=["authentication"])
 
 app.include_router(list, prefix="/api", tags=["listing"])
+
+app.mount("/images", StaticFiles(directory="images"), name="images")
+app.mount("/files", StaticFiles(directory="files"), name="files")
+
+
 
 # Run the server
 if __name__ == "__main__":
