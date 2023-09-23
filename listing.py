@@ -58,7 +58,9 @@ async def download_file(id: int, file_name: str):
     if not os.path.exists(file_path):
         return JSONResponse(content={"message": "File not found"})
 
-    return FileResponse(file_path, headers={"Content-Disposition": f"attachment; filename={file_name}"})
+    # return FileResponse(file_path, headers={"Content-Disposition": f"attachment; filename={file_name}"})
+    return FileResponse(path=file_path, filename=file_path, media_type='application/octet-stream')
+
 
 @router.get("{id}/{file_name}")
 async def download_file(id: int, file_name: str):
