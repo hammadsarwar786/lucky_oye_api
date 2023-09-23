@@ -1,13 +1,10 @@
 from fastapi import APIRouter
-from fastapi import FastAPI, File, UploadFile
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, File, UploadFile, Form
+from fastapi.responses import FileResponse, JSONResponse
 import os
 import shutil
-from fastapi import FastAPI, UploadFile, Form
-from fastapi.responses import JSONResponse
-import os
 from typing import List
-
+import logging
 router = APIRouter()
 # Endpoint to upload a document
 @router.post("/uploadfile")
@@ -55,7 +52,8 @@ async def upload_files(id: int = Form(...), files: List[UploadFile] = Form(...))
 async def download_file(id: int, file_name: str):
     id_directory = os.path.join("images", str(id))
     file_path = os.path.join(id_directory, file_name)
-
+      # Log the file_path to help with debugging
+    logging.info(f"File path: {file_path}")
     # Check if the file exists
     if not os.path.exists(file_path):
         return JSONResponse(content={"message": "File not found"})
