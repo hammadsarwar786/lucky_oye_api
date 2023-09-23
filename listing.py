@@ -9,7 +9,6 @@ import os
 from typing import List
 
 router = APIRouter()
-UPLOAD_DIR = "uploads"
 # Endpoint to upload a document
 @router.post("/uploadfile")
 async def upload_file(id: int = Form(...), files: List[UploadFile]= Form(...)):
@@ -19,15 +18,18 @@ async def upload_file(id: int = Form(...), files: List[UploadFile]= Form(...)):
     # Create a unique filename for the uploaded file by joining the current directory and the file name
 
     # Save the uploaded file to the server
+    file_links = []
+
     for file in files:
         file_path = os.path.join(id_directory, file.filename)
         with open(file_path, "wb") as f:
             shutil.copyfileobj(file.file, f)
-
+        file_links.append(f"http://idxdubai.com/{id}/{file.filename}")
+        
     # Return a response with the link to download the file
-    return {"message": "File uploaded successfully", "file_link": f"/download/{file.filename}"}
+    return JSONResponse(content={"message": "Files uploaded successfully", "file_links": file_links})
 
-
+UPLOAD_DIR = "images"
 @router.post("/uploadimage")
 async def upload_files(id: int = Form(...), files: List[UploadFile] = Form(...)):
     # Create a directory for the ID if it doesn't exist
@@ -45,6 +47,28 @@ async def upload_files(id: int = Form(...), files: List[UploadFile] = Form(...))
             shutil.copyfileobj(file.file, f)
 
         # Add the file's link to the list of file links
-        file_links.append(f"/download/{id}/{file.filename}")
+        file_links.append(f"http://idxdubai.com/{id}/{file.filename}")
 
     return JSONResponse(content={"message": "Files uploaded successfully", "file_links": file_links})
+
+@router.get("/images/{id}/{file_name}")
+async def download_file(id: int, file_name: str):
+    id_directory = os.path.join("images", str(id))
+    file_path = os.path.join(id_directory, file_name)
+
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        return JSONResponse(content={"message": "File not found"})
+
+    return FileResponse(file_path, headers={"Content-Disposition": f"attachment; filename={file_name}"})
+
+@router.get("/files/{id}/{file_name}")
+async def download_file(id: int, file_name: str):
+    id_directory = os.path.join("files", str(id))
+    file_path = os.path.join(id_directory, file_name)
+
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        return JSONResponse(content={"message": "File not found"})
+
+    return FileResponse(file_path, headers={"Content-Disposition": f"attachment; filename={file_name}"})
