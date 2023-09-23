@@ -2,6 +2,7 @@
 from fastapi import FastAPI
 from auth import router as auth_router
 from notification import router as notifi
+from listing import router as list
 from fastapi.middleware.cors import CORSMiddleware
 # CORS configuration
 
@@ -27,6 +28,7 @@ app.include_router(notifi, prefix="/api", tags=["notification"])
 # baseurl/api/signup
 app.include_router(auth_router, prefix="/api", tags=["authentication"])
 
+app.include_router(list, prefix="/api", tags=["listing"])
 
 # Run the server
 if __name__ == "__main__":
