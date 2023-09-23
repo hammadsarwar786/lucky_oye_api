@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post("/uploadfile")
 async def upload_file(id: int = Form(...), listingID: int = Form(...) ,files: List[UploadFile]= Form(...)):
     # Get the current working directory
-    id_directory = os.path.join("files", listingID,str(id))
+    id_directory = os.path.join("files", str(listingID), str(id))
     os.makedirs(id_directory, exist_ok=True)
     # Create a unique filename for the uploaded file by joining the current directory and the file name
 
@@ -31,7 +31,7 @@ UPLOAD_DIR = "images"
 @router.post("/uploadimage")
 async def upload_files(id: int = Form(...), listingID: int = Form(...) , files: List[UploadFile] = Form(...)):
     # Create a directory for the ID if it doesn't exist
-    id_directory = os.path.join(UPLOAD_DIR, listingID, str(id))
+    id_directory = os.path.join(UPLOAD_DIR, str(listingID), str(id))
     os.makedirs(id_directory, exist_ok=True)
 
     file_links = []
