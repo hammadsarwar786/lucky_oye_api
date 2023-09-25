@@ -1,4 +1,5 @@
 # main.py
+import os
 from fastapi import FastAPI
 from auth import router as auth_router
 from notification import router as notifi
@@ -7,12 +8,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 # CORS configuration
 
+os.makedirs("images", exist_ok=True)
+os.makedirs("files", exist_ok=True)
 
 app = FastAPI()
 
 origins = ["*"]
-laptop_ip = "52.0.41.103"
-# laptop_ip = "127.0.0.1"
+# laptop_ip = "52.0.41.103"
+laptop_ip = "127.0.0.1"
 
 app.add_middleware(
     CORSMiddleware,
@@ -39,5 +42,5 @@ app.mount("/files", StaticFiles(directory="files"), name="files")
 # Run the server
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-    # uvicorn.run(app, host="127.0.0.1", port=8000)
+    # uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
